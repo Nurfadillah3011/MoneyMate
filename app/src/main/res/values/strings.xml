@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoneyMate</string>
+
+    <!-- Transaction types -->
+    <string-array name="transaction_types">
+        <item>Income</item>
+        <item>Expense</item>
+    </string-array>
+
+    <!-- Categories -->
+    <string-array name="categories">
+        <item>Makanan</item>
+        <item>Transportasi</item>
+        <item>Hiburan</item>
+        <item>Belanja</item>
+        <item>Kesehatan</item>
+        <item>Pendidikan</item>
+        <item>Tagihan</item>
+        <item>Gaji</item>
+        <item>Bonus</item>
+        <item>Investasi</item>
+        <item>Lainnya</item>
+    </string-array>
+
+    <!-- Menu items -->
+    <string name="action_chart">Grafik</string>
+    <string name="action_monthly_report">Laporan Bulanan</string>
+</resources>
