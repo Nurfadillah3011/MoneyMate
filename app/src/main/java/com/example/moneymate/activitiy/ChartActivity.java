@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.moneymate.services.CurrencyService;
 import com.example.moneymate.database.DatabaseHelper;
 import com.example.moneymate.R;
+import com.example.moneymate.utils.NetworkUtils;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -157,14 +158,19 @@ public class ChartActivity extends AppCompatActivity {
     private void updateCurrencyFormat() {
         try {
             String symbol = currencySymbols.getOrDefault(displayCurrency, displayCurrency);
-            if (displayCurrency.equals("IDR")) {
+            if (displayCurrency.equals("IDR") || !NetworkUtils.isNetworkAvailable(this)) {
+                // Gunakan format IDR jika mata uang adalah IDR atau tidak ada jaringan
                 currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+                displayCurrency = "IDR"; // Force IDR when offline
             } else {
                 currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+                currencyFormat.setCurrency(java.util.Currency.getInstance(displayCurrency));
             }
         } catch (Exception e) {
             Log.e(TAG, "Error updating currency format", e);
-            currencyFormat = NumberFormat.getCurrencyInstance();
+            // Fallback ke IDR jika terjadi error
+            currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+            displayCurrency = "IDR";
         }
     }
 
@@ -201,6 +207,11 @@ public class ChartActivity extends AppCompatActivity {
 
     private void loadChartData() {
         try {
+            if (!NetworkUtils.isNetworkAvailable(this)) {
+                displayCurrency = "IDR";
+                updateCurrencyFormat();
+            }
+
             if (tvMonth != null && monthFormat != null && currentMonth != null) {
                 tvMonth.setText(monthFormat.format(currentMonth.getTime()));
             }
@@ -228,6 +239,8 @@ public class ChartActivity extends AppCompatActivity {
             showChart();
             updateChartData(categorySpending);
         } catch (Exception e) {
+            displayCurrency = "IDR";
+            updateCurrencyFormat();
             Log.e(TAG, "Error loading chart data", e);
             Toast.makeText(this, "Error loading data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             showEmptyState();
@@ -265,6 +278,11 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     private void updateChartData(List<DatabaseHelper.CategorySpending> categorySpending) {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            displayCurrency = "IDR";
+            updateCurrencyFormat();
+        }
+
         double totalExpense = 0;
         for (DatabaseHelper.CategorySpending spending : categorySpending) {
             totalExpense += spending.getAmount();
@@ -275,8 +293,8 @@ public class ChartActivity extends AppCompatActivity {
 
         try {
             // If display currency is IDR or currency service is null, use original values
-            if (displayCurrency.equals("IDR") || currencyService == null) {
-                updateUI(finalTotalExpense, finalCategorySpending);
+            if (displayCurrency.equals("IDR") || !NetworkUtils.isNetworkAvailable(this)) {
+                updateUI(totalExpense, categorySpending);
                 return;
             }
 

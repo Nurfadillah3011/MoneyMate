@@ -6,10 +6,14 @@ import android.util.Log;
 
 import com.example.moneymate.utils.NetworkUtils;
 import com.example.moneymate.models.ExchangeRateResponse;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,9 +83,13 @@ public class CurrencyService {
             if (currentTime - lastUpdate < CACHE_DURATION) {
                 String ratesJson = prefs.getString(KEY_RATES, "");
                 if (!ratesJson.isEmpty()) {
-                    // Parse cached rates (simple implementation)
-                    // In production, you might want to use Gson for better JSON parsing
-                    Log.d(TAG, "Using cached exchange rates");
+                    Type type = new TypeToken<Map<String, Double>>(){}.getType();
+                    Map<String, Double> cachedRates = new Gson().fromJson(ratesJson, type);
+                    if (cachedRates != null) {
+                        exchangeRates.clear();
+                        exchangeRates.putAll(cachedRates);
+                        Log.d(TAG, "Loaded cached exchange rates");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -193,7 +201,9 @@ public class CurrencyService {
         try {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putLong(KEY_LAST_UPDATE, System.currentTimeMillis());
-            // In production, you'd want to properly serialize the rates map
+            // Serialize rates map to JSON string
+            String ratesJson = new Gson().toJson(rates);
+            editor.putString(KEY_RATES, ratesJson);
             editor.apply();
             Log.d(TAG, "Exchange rates cached successfully");
         } catch (Exception e) {
