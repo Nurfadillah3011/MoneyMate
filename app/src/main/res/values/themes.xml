@@ -1,9 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Moneymate" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Base Light Theme -->
+    <style name="Theme.Moneymate" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Material Design Colors -->
+        <item name="colorPrimary">@color/primary_light</item>
+        <item name="colorPrimaryVariant">@color/primary_variant_light</item>
+        <item name="colorSecondary">@color/secondary_light</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant_light</item>
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/on_error</item>
+
+        <!-- Custom Theme Attributes for Light Mode -->
+        <item name="backgroundColor">@color/background_light</item>
+        <item name="cardBackgroundColor">@color/surface_light</item>
+        <item name="primaryBackgroundColor">#F0E6FF</item>
+        <item name="secondaryBackgroundColor">#DACEFB</item>
+        <item name="textPrimaryColor">@color/text_primary</item>
+        <item name="textSecondaryColor">@color/text_secondary</item>
+        <item name="borderColor">@color/border_light</item>
+        <item name="accentColor">@color/primary_light</item>
+        <item name="surfaceColor">@color/surface_light</item>
+        <item name="headerBackgroundColor">#DACEFB</item>
+        <item name="iconTintColor">@color/primary_light</item>
+        <item name="buttonBackgroundColor">@color/primary_light</item>
+        <item name="inputBackgroundColor">@color/surface_light</item>
+        <item name="dividerColor">#E0E0E0</item>
+
+        <!-- Status bar dan navigation bar -->
+        <item name="android:statusBarColor">@color/primary_light</item>
+        <item name="android:navigationBarColor">@color/surface_light</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o">true</item>
+
+        <!-- Background untuk window -->
+        <item name="android:windowBackground">@color/background_light</item>
     </style>
 
-    <style name="Theme.Moneymate" parent="Base.Theme.Moneymate" />
 </resources>

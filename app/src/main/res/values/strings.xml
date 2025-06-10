@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MoneyMate</string>
+    <string name="app_name">FinFlex</string>
 
     <!-- Transaction types -->
     <string-array name="transaction_types">
@@ -24,6 +24,9 @@
     </string-array>
 
     <!-- Menu items -->
+    <string name="refresh">refresh</string>
     <string name="action_chart">Grafik</string>
     <string name="action_monthly_report">Laporan Bulanan</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
