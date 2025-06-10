@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="32dp"
+    android:background="?attr/backgroundColor">
+
+    <!-- No Network Icon -->
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/no_internet"
+        android:layout_marginBottom="24dp"
+        app:tint="?attr/iconTintColor"
+        android:alpha="0.7"
+        android:contentDescription="No network icon" />
+
+    <!-- Main Message -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tidak Ada Koneksi Internet"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="?attr/textPrimaryColor"
+        android:gravity="center"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/poppins_semibold" />
+
+    <!-- Description -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Periksa koneksi internet Anda dan coba lagi. Beberapa fitur memerlukan koneksi internet untuk berfungsi dengan baik."
+        android:textSize="16sp"
+        android:textColor="?attr/textSecondaryColor"
+        android:gravity="center"
+        android:layout_marginBottom="32dp"
+        android:lineSpacingExtra="4dp"
+        android:fontFamily="@font/poppins_regular" />
+
+    <!-- Connection Tips -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:cardBackgroundColor="?attr/cardBackgroundColor">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tips Koneksi:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/textPrimaryColor"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/poppins_semibold" />
+
+            <!-- WiFi Tip -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_wifi"
+                    android:layout_marginEnd="12dp"
+                    app:tint="?attr/accentColor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Periksa koneksi WiFi Anda"
+                    android:textSize="14sp"
+                    android:textColor="?attr/textSecondaryColor"
+                    android:fontFamily="@font/poppins_light"/>
+
+            </LinearLayout>
+
+            <!-- Mobile Data Tip -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/signal"
+                    android:layout_marginEnd="12dp"
+                    app:tint="?attr/accentColor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Aktifkan data seluler jika diperlukan"
+                    android:textSize="14sp"
+                    android:textColor="?attr/textSecondaryColor"
+                    android:fontFamily="@font/poppins_light"/>
+
+            </LinearLayout>
+
+            <!-- Airplane Mode Tip -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/airplane_off"
+                    android:layout_marginEnd="12dp"
+                    app:tint="?attr/accentColor" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Pastikan mode pesawat tidak aktif"
+                    android:textSize="14sp"
+                    android:textColor="?attr/textSecondaryColor"
+                    android:fontFamily="@font/poppins_light"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- Retry Button -->
+        <Button
+            android:id="@+id/btn_retry"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Coba Lagi"
+            android:textColor="@android:color/white"
+            android:backgroundTint="?attr/accentColor"
+            android:fontFamily="@font/poppins_semibold"
+            app:cornerRadius="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp" />
+
+
+
+    </LinearLayout>
+
+    <!-- Status Text -->
+    <TextView
+        android:id="@+id/tv_network_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: Tidak ada koneksi"
+        android:textSize="12sp"
+        android:textColor="?attr/textSecondaryColor"
+        android:layout_marginTop="16dp"
+        android:alpha="0.7"
+        android:fontFamily="@font/poppins_light"/>
+
+</LinearLayout>
