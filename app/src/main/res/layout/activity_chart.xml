@@ -106,8 +106,8 @@
             <Button
                 android:id="@+id/btn_refresh"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:layout_marginTop="12dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
                 android:backgroundTint="?attr/cardBackgroundColor"
                 android:text="Refresh Data"
                 android:textSize="12sp"
@@ -116,7 +116,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:minHeight="0dp"
-                android:visibility="gone" />
+                android:visibility="visible" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

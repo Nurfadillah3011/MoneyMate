@@ -1,8 +1,13 @@
 package com.example.moneymate.activitiy;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -31,16 +36,25 @@ public class ChartActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private CurrencyService currencyService;
     private PieChart pieChart;
-    private TextView tvMonth, tvTotalExpense, tvEmptyMessage;
+    private TextView tvMonth, tvTotalExpense, tvEmptyMessage, tvNetworkStatus;
     private Button btnPrevMonth, btnNextMonth, btnRefresh;
     private Calendar currentMonth;
     private NumberFormat currencyFormat;
     private SimpleDateFormat monthFormat;
     private String displayCurrency;
+    private String originalDisplayCurrency; // Store original currency preference
     private SharedPreferences prefs;
     private static final String PREFS_NAME = "MoneyMatePrefs";
     private static final String KEY_DISPLAY_CURRENCY = "display_currency";
     private Map<String, String> currencySymbols;
+
+    // Network monitoring
+    private NetworkChangeReceiver networkReceiver;
+    private boolean wasOnline = true;
+    private boolean hasShownOfflineMessage = false;
+
+    // Store current data for re-conversion
+    private List<DatabaseHelper.CategorySpending> currentCategorySpending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +68,7 @@ public class ChartActivity extends AppCompatActivity {
             initializeComponents();
             initViews();
             setupChart();
+            setupNetworkMonitoring();
             loadChartData();
 
             Log.d(TAG, "onCreate completed successfully");
@@ -86,7 +101,8 @@ public class ChartActivity extends AppCompatActivity {
     private void initializeComponents() {
         try {
             prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-            displayCurrency = prefs.getString(KEY_DISPLAY_CURRENCY, "IDR");
+            originalDisplayCurrency = prefs.getString(KEY_DISPLAY_CURRENCY, "IDR");
+            displayCurrency = originalDisplayCurrency;
 
             dbHelper = new DatabaseHelper(this);
             currencyService = new CurrencyService(this);
@@ -96,6 +112,9 @@ public class ChartActivity extends AppCompatActivity {
 
             monthFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
             currentMonth = Calendar.getInstance();
+
+            // Check initial network status
+            wasOnline = NetworkUtils.isNetworkAvailable(this);
         } catch (Exception e) {
             Log.e(TAG, "Error initializing components", e);
             Toast.makeText(this, "Error initializing components", Toast.LENGTH_SHORT).show();
@@ -107,14 +126,17 @@ public class ChartActivity extends AppCompatActivity {
             pieChart = findViewById(R.id.pie_chart);
             tvMonth = findViewById(R.id.tv_month);
             tvTotalExpense = findViewById(R.id.tv_total_expense);
-            tvEmptyMessage = findViewById(R.id.tv_empty_message); // Make sure this exists in your layout
+            tvEmptyMessage = findViewById(R.id.tv_empty_message);
             btnPrevMonth = findViewById(R.id.btn_prev_month);
             btnNextMonth = findViewById(R.id.btn_next_month);
             btnRefresh = findViewById(R.id.btn_refresh);
 
+            // Initially hide refresh button
+            btnRefresh.setVisibility(android.view.View.GONE);
+
             btnRefresh.setOnClickListener(v -> {
                 Log.d(TAG, "Refresh button clicked");
-                loadChartData();
+                handleRefreshClick();
             });
 
             btnPrevMonth.setOnClickListener(v -> {
@@ -137,12 +159,43 @@ public class ChartActivity extends AppCompatActivity {
                 }
             });
 
-            // Load initial data
-            loadChartData();
-
         } catch (Exception e) {
             Log.e(TAG, "Error initializing views", e);
             Toast.makeText(this, "Error initializing views", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setupNetworkMonitoring() {
+        networkReceiver = new NetworkChangeReceiver();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkReceiver, filter);
+    }
+
+    private void handleRefreshClick() {
+        boolean isOnline = NetworkUtils.isNetworkAvailable(this);
+
+        if (isOnline) {
+            Log.d(TAG, "Network is available, refreshing data");
+
+            // Reset to original currency preference
+            displayCurrency = originalDisplayCurrency;
+            updateCurrencyFormat();
+
+            // Hide refresh button temporarily
+            btnRefresh.setVisibility(android.view.View.GONE);
+
+            // Show loading message
+            Toast.makeText(this, "Memperbarui data...", Toast.LENGTH_SHORT).show();
+
+            // Reload chart data
+            loadChartData();
+
+            // Reset offline message flag
+            hasShownOfflineMessage = false;
+
+        } else {
+            Log.d(TAG, "Network still not available");
+            Toast.makeText(this, "Tidak ada koneksi internet. Coba lagi nanti.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -161,11 +214,15 @@ public class ChartActivity extends AppCompatActivity {
             if (displayCurrency.equals("IDR") || !NetworkUtils.isNetworkAvailable(this)) {
                 // Gunakan format IDR jika mata uang adalah IDR atau tidak ada jaringan
                 currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-                displayCurrency = "IDR"; // Force IDR when offline
+                if (!NetworkUtils.isNetworkAvailable(this)) {
+                    displayCurrency = "IDR"; // Force IDR when offline
+                }
             } else {
                 currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
                 currencyFormat.setCurrency(java.util.Currency.getInstance(displayCurrency));
             }
+
+            Log.d(TAG, "Currency format updated to: " + displayCurrency);
         } catch (Exception e) {
             Log.e(TAG, "Error updating currency format", e);
             // Fallback ke IDR jika terjadi error
@@ -207,17 +264,17 @@ public class ChartActivity extends AppCompatActivity {
 
     private void loadChartData() {
         try {
-            if (!NetworkUtils.isNetworkAvailable(this)) {
+            boolean isOnline = NetworkUtils.isNetworkAvailable(this);
+
+            // Update currency based on network status
+            if (!isOnline && !displayCurrency.equals("IDR")) {
+                Log.d(TAG, "Network not available, switching to IDR");
                 displayCurrency = "IDR";
                 updateCurrencyFormat();
             }
 
             if (tvMonth != null && monthFormat != null && currentMonth != null) {
                 tvMonth.setText(monthFormat.format(currentMonth.getTime()));
-            }
-
-            if (btnRefresh != null) {
-                btnRefresh.setVisibility(android.view.View.GONE);
             }
 
             if (dbHelper == null) {
@@ -231,6 +288,9 @@ public class ChartActivity extends AppCompatActivity {
                     currentMonth.get(Calendar.YEAR),
                     currentMonth.get(Calendar.MONTH));
 
+            // Store current data for potential re-conversion
+            currentCategorySpending = categorySpending;
+
             if (categorySpending == null || categorySpending.isEmpty()) {
                 showEmptyState();
                 return;
@@ -239,8 +299,6 @@ public class ChartActivity extends AppCompatActivity {
             showChart();
             updateChartData(categorySpending);
         } catch (Exception e) {
-            displayCurrency = "IDR";
-            updateCurrencyFormat();
             Log.e(TAG, "Error loading chart data", e);
             Toast.makeText(this, "Error loading data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             showEmptyState();
@@ -278,7 +336,10 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     private void updateChartData(List<DatabaseHelper.CategorySpending> categorySpending) {
-        if (!NetworkUtils.isNetworkAvailable(this)) {
+        boolean isOnline = NetworkUtils.isNetworkAvailable(this);
+
+        if (!isOnline) {
+            Log.d(TAG, "Offline mode: using IDR currency");
             displayCurrency = "IDR";
             updateCurrencyFormat();
         }
@@ -292,8 +353,8 @@ public class ChartActivity extends AppCompatActivity {
         final List<DatabaseHelper.CategorySpending> finalCategorySpending = categorySpending;
 
         try {
-            // If display currency is IDR or currency service is null, use original values
-            if (displayCurrency.equals("IDR") || !NetworkUtils.isNetworkAvailable(this)) {
+            // If display currency is IDR or no network, use original values
+            if (displayCurrency.equals("IDR") || !isOnline) {
                 updateUI(totalExpense, categorySpending);
                 return;
             }
@@ -342,25 +403,21 @@ public class ChartActivity extends AppCompatActivity {
 
                 @Override
                 public void onNetworkError() {
-                    Log.w(TAG, "Network error occurred, using default rates");
+                    Log.w(TAG, "Network error occurred, switching to IDR");
 
-                    // Try to convert with default rates
-                    try {
-                        double convertedTotal = currencyService.convertCurrency(finalTotalExpense, "IDR", displayCurrency);
-                        updateUI(convertedTotal, finalCategorySpending);
+                    // Force switch to IDR
+                    displayCurrency = "IDR";
+                    updateCurrencyFormat();
+                    updateUI(finalTotalExpense, finalCategorySpending);
 
-                        // Show a toast to inform user about network issue
-                        Toast.makeText(ChartActivity.this, "No internet connection. Using approximate exchange rates.", Toast.LENGTH_LONG).show();
+                    // Show refresh button and inform user
+                    if (btnRefresh != null) {
+                        btnRefresh.setVisibility(android.view.View.VISIBLE);
+                    }
 
-                        // Show refresh button for when network is available
-                        if (btnRefresh != null) {
-                            btnRefresh.setVisibility(android.view.View.VISIBLE);
-                        }
-                    } catch (Exception e) {
-                        Log.e(TAG, "Error converting currency with default rates", e);
-                        updateUI(finalTotalExpense, finalCategorySpending);
-
-                        Toast.makeText(ChartActivity.this, "Currency conversion failed. Showing in IDR.", Toast.LENGTH_SHORT).show();
+                    if (!hasShownOfflineMessage) {
+                        Toast.makeText(ChartActivity.this, "Tidak ada koneksi internet. Menampilkan dalam IDR.", Toast.LENGTH_LONG).show();
+                        hasShownOfflineMessage = true;
                     }
                 }
             });
@@ -418,7 +475,7 @@ public class ChartActivity extends AppCompatActivity {
             pieChart.invalidate();
             pieChart.animateY(1000);
 
-            Log.d(TAG, "Chart updated successfully with " + entries.size() + " entries");
+            Log.d(TAG, "Chart updated successfully with " + entries.size() + " entries in " + displayCurrency);
         } catch (Exception e) {
             Log.e(TAG, "Error updating chart with data", e);
         }
@@ -449,6 +506,83 @@ public class ChartActivity extends AppCompatActivity {
         return colors;
     }
 
+    // Network monitoring receiver
+    private class NetworkChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            boolean isOnline = NetworkUtils.isNetworkAvailable(context);
+
+            Log.d(TAG, "Network status changed. Was online: " + wasOnline + ", Now online: " + isOnline);
+
+            if (wasOnline && !isOnline) {
+                // Network just went offline
+                Log.d(TAG, "Network disconnected");
+                handleNetworkDisconnected();
+            } else if (!wasOnline && isOnline) {
+                // Network just came back online
+                Log.d(TAG, "Network reconnected");
+                handleNetworkReconnected();
+            }
+
+            wasOnline = isOnline;
+        }
+    }
+
+    private void handleNetworkDisconnected() {
+        runOnUiThread(() -> {
+            try {
+                Log.d(TAG, "Handling network disconnection");
+
+                // Switch to IDR if currently using other currency
+                if (!displayCurrency.equals("IDR")) {
+                    displayCurrency = "IDR";
+                    updateCurrencyFormat();
+
+                    // Re-convert current data to IDR
+                    if (currentCategorySpending != null && !currentCategorySpending.isEmpty()) {
+                        updateChartData(currentCategorySpending);
+                    }
+                }
+
+                // Show refresh button
+                if (btnRefresh != null) {
+                    btnRefresh.setVisibility(android.view.View.VISIBLE);
+                }
+
+                // Show offline message
+                if (!hasShownOfflineMessage) {
+                    Toast.makeText(this, "Koneksi terputus. Menampilkan dalam IDR.", Toast.LENGTH_LONG).show();
+                    hasShownOfflineMessage = true;
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error handling network disconnection", e);
+            }
+        });
+    }
+
+    private void handleNetworkReconnected() {
+        runOnUiThread(() -> {
+            try {
+                Log.d(TAG, "Handling network reconnection");
+
+                // Show refresh button to allow user to update to their preferred currency
+                if (btnRefresh != null && !originalDisplayCurrency.equals("IDR")) {
+                    btnRefresh.setVisibility(android.view.View.VISIBLE);
+                }
+
+                // Show reconnection message
+                Toast.makeText(this, "Koneksi tersambung kembali. Tekan refresh untuk memperbarui mata uang.", Toast.LENGTH_LONG).show();
+
+                // Reset offline message flag
+                hasShownOfflineMessage = false;
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error handling network reconnection", e);
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -456,11 +590,18 @@ public class ChartActivity extends AppCompatActivity {
             if (prefs != null) {
                 String newDisplayCurrency = prefs.getString(KEY_DISPLAY_CURRENCY, "IDR");
 
-                // Only reload if currency has changed
-                if (!newDisplayCurrency.equals(displayCurrency)) {
+                // Update original currency preference
+                originalDisplayCurrency = newDisplayCurrency;
+
+                // Only reload if currency has changed and we're online
+                if (!newDisplayCurrency.equals(displayCurrency) && NetworkUtils.isNetworkAvailable(this)) {
                     displayCurrency = newDisplayCurrency;
                     updateCurrencyFormat();
                     loadChartData();
+                } else if (!NetworkUtils.isNetworkAvailable(this)) {
+                    // If offline, force IDR
+                    displayCurrency = "IDR";
+                    updateCurrencyFormat();
                 }
             }
         } catch (Exception e) {
@@ -471,9 +612,20 @@ public class ChartActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        // Unregister network receiver
+        if (networkReceiver != null) {
+            try {
+                unregisterReceiver(networkReceiver);
+            } catch (Exception e) {
+                Log.e(TAG, "Error unregistering network receiver", e);
+            }
+        }
+
         // Clean up resources
         pieChart = null;
         dbHelper = null;
         currencyService = null;
+        currentCategorySpending = null;
     }
 }
