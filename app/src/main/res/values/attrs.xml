@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom theme attributes untuk dark mode support -->
+    <declare-styleable name="CustomTheme">
+        <attr name="backgroundColor" format="color" />
+        <attr name="cardBackgroundColor" format="color" />
+        <attr name="primaryBackgroundColor" format="color" />
+        <attr name="secondaryBackgroundColor" format="color" />
+        <attr name="textPrimaryColor" format="color" />
+        <attr name="textSecondaryColor" format="color" />
+        <attr name="borderColor" format="color" />
+        <attr name="accentColor" format="color" />
+        <attr name="surfaceColor" format="color" />
+        <attr name="headerBackgroundColor" format="color" />
+        <attr name="iconTintColor" format="color" />
+        <attr name="buttonBackgroundColor" format="color" />
+        <attr name="inputBackgroundColor" format="color" />
+        <attr name="dividerColor" format="color" />
+    </declare-styleable>
+</resources>
