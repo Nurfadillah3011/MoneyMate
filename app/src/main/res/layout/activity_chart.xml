@@ -10,10 +10,14 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:gravity="center_vertical"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/accentColor"
         android:elevation="6dp"
-        android:titleTextColor="@android:color/white" />
+        android:background="?attr/headerBackgroundColor"
+        android:titleTextColor="@android:color/white"
+        app:tint="?attr/iconTintColor" />
 
     <!-- Month Navigation -->
     <androidx.cardview.widget.CardView
@@ -84,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:text="Total Pengeluaran Bulan Ini"
                 android:textSize="14sp"
+                android:textStyle="bold"
                 android:textColor="?attr/textSecondaryColor"
                 android:fontFamily="@font/poppins_light" />
 

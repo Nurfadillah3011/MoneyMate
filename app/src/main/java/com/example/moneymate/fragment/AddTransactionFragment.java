@@ -40,34 +40,24 @@ public class AddTransactionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        try {
-            View view = inflater.inflate(R.layout.fragment_add_transaction, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_transaction, container, false);
 
-            Log.d(TAG, "Fragment view inflated successfully");
 
-            // Initialize components with error handling
-            initNavController();
-            initDatabase();
-            initCurrencyService();
+        // Initialize components with error handling
+        initNavController();
+        initDatabase();
+        initCurrencyService();
 
-            selectedDate = Calendar.getInstance();
-            loadDisplayCurrency();
+        selectedDate = Calendar.getInstance();
+        loadDisplayCurrency();
 
-            initViews(view);
-            setupSpinners();
-            setupDatePicker();
-            setupSaveButton();
+        initViews(view);
+        setupSpinners();
+        setupDatePicker();
+        setupSaveButton();
 
-            Log.d(TAG, "Fragment initialization completed");
-            return view;
-
-        } catch (Exception e) {
-            Log.e(TAG, "Error in onCreateView: " + e.getMessage(), e);
-            Toast.makeText(getContext(), "Error loading page", Toast.LENGTH_SHORT).show();
-            return null;
-        }
+    return view;
     }
-
     private void initNavController() {
         try {
             if (getActivity() != null) {

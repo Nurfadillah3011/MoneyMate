@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="?attr/primaryBackgroundColor">
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -25,6 +24,7 @@
         android:textSize="14sp"
         android:textColor="?attr/textSecondaryColor"
         android:layout_marginBottom="4dp"
+        android:textStyle="bold"
         android:fontFamily="@font/poppins_regular"/>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -42,8 +42,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
+            android:fontFamily="@font/poppins_light"
             android:textColor="?attr/textPrimaryColor"
-            android:background="@drawable/bg_date_button" />
+            android:background="@drawable/circle_background_purple"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,6 +54,7 @@
         android:layout_height="wrap_content"
         android:text="Deskripsi"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:textColor="?attr/textSecondaryColor"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/poppins_regular"/>
@@ -74,8 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:fontFamily="@font/poppins_light"
             android:textColor="?attr/textPrimaryColor"
-            android:background="@drawable/bg_date_button" />
+            android:background="@drawable/circle_background_purple" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,6 +87,7 @@
         android:layout_height="wrap_content"
         android:text="Tipe Transaksi"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:textColor="?attr/textSecondaryColor"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/poppins_regular"/>
@@ -94,14 +98,14 @@
         android:layout_height="48dp"
         android:fontFamily="@font/poppins_light"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_date_button"
-        android:backgroundTint="?attr/inputBackgroundColor" />
+        android:background="@drawable/circle_background_purple"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Kategori"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:textColor="?attr/textSecondaryColor"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/poppins_regular"/>
@@ -112,14 +116,14 @@
         android:layout_height="48dp"
         android:fontFamily="@font/poppins_light"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_date_button"
-        android:backgroundTint="?attr/inputBackgroundColor" />
+        android:background="@drawable/circle_background_purple"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tanggal"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:textColor="?attr/textSecondaryColor"
         android:layout_marginBottom="4dp"
         android:fontFamily="@font/poppins_regular"/>
@@ -128,14 +132,14 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/bg_date_button"
         android:backgroundTint="?attr/inputBackgroundColor"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="12dp"
-        android:paddingEnd="12dp">
+        android:paddingEnd="12dp"
+        android:background="@drawable/circle_background_purple">
 
         <Button
             android:id="@+id/btn_date"
@@ -143,10 +147,9 @@
             android:layout_height="48dp"
             android:text="Pilih Tanggal"
             android:textColor="?attr/accentColor"
-            android:background="?android:attr/selectableItemBackground"
             android:gravity="start|center_vertical"
             android:paddingLeft="12dp"
-            android:fontFamily="@font/poppins_light"
+            android:fontFamily="@font/poppins_semibold"
             style="?android:attr/borderlessButtonStyle" />
 
         <ImageView

@@ -1,12 +1,14 @@
 package com.example.moneymate.adapter;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moneymate.R;
@@ -122,12 +124,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // Set icon and color based on transaction type
         if (transaction.getType().equals("income")) {
             holder.ivIcon.setImageResource(R.drawable.ic_income);
-            holder.tvAmount.setTextColor(holder.itemView.getContext()
-                    .getResources().getColor(android.R.color.holo_green_dark));
+            holder.tvAmount.setTextColor(Color.parseColor("#10A812"));
         } else {
             holder.ivIcon.setImageResource(R.drawable.ic_expense);
-            holder.tvAmount.setTextColor(holder.itemView.getContext()
-                    .getResources().getColor(android.R.color.holo_red_dark));
+            holder.tvAmount.setTextColor(ResourcesCompat.getColor(
+                    holder.itemView.getContext().getResources(),
+                    android.R.color.holo_red_dark, null));
         }
 
         // Click to view details
