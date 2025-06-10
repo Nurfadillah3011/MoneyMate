@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    android:padding="24dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_transaction_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="?attr/cardBackgroundColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Transaction Header with Icon -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/iv_transaction_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_money2"
+                    android:contentDescription="Transaction icon"
+                    android:layout_marginEnd="16dp"
+                    tools:srcCompat="@drawable/ic_money2"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Deskripsi Transaksi"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/textPrimaryColor"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="Pembelian Buku Programming Android"
+                    android:fontFamily="@font/poppins_semibold"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/dividerColor"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Category and Type Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/category"
+                    android:contentDescription="Category icon"
+                    android:layout_marginEnd="8dp"
+                    app:tint="?attr/textSecondaryColor"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kategori"
+                    android:textSize="15sp"
+                    android:textColor="?attr/textPrimaryColor"
+                    android:fontFamily="@font/poppins_light"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" • "
+                    android:textSize="16sp"
+                    android:textColor="?attr/textSecondaryColor"/>
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_type"
+                    android:contentDescription="Type icon"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:tint="?attr/textSecondaryColor"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipe"
+                    android:textSize="15sp"
+                    android:textColor="?attr/textPrimaryColor"
+                    android:fontFamily="@font/poppins_light"/>
+            </LinearLayout>
+
+            <!-- Date Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_calendar"
+                    android:contentDescription="Date icon"
+                    android:layout_marginEnd="8dp"
+                    app:tint="?attr/textSecondaryColor"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01 Jan 2024"
+                    android:textSize="15sp"
+                    android:textColor="?attr/textPrimaryColor"
+                    tools:text="15 Mei 2024, 14:30"
+                    android:fontFamily="@font/poppins_light"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/dividerColor"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Amount Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/money"
+                    android:contentDescription="Amount icon"
+                    android:layout_marginEnd="12dp"
+                    app:tint="?attr/accentColor"/>
+
+                <TextView
+                    android:id="@+id/tv_detail_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rp 50.000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/accentColor"
+                    tools:text="Rp 250.000"
+                    android:fontFamily="@font/poppins_semibold"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Delete Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_delete"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hapus Transaksi"
+        android:textColor="@color/expense_red"
+        app:icon="@drawable/ic_delete"
+        app:iconGravity="textStart"
+        app:iconTint="@color/expense_red"
+        app:strokeColor="@color/expense_red"
+        app:strokeWidth="1dp"
+        app:layout_constraintTop_toBottomOf="@id/card_transaction_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppins_regular"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
