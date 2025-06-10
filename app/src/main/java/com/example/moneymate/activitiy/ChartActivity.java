@@ -1,4 +1,4 @@
-package com.example.moneymate;
+package com.example.moneymate.activitiy;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,6 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.moneymate.services.CurrencyService;
+import com.example.moneymate.database.DatabaseHelper;
+import com.example.moneymate.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -102,6 +106,7 @@ public class ChartActivity extends AppCompatActivity {
             pieChart = findViewById(R.id.pie_chart);
             tvMonth = findViewById(R.id.tv_month);
             tvTotalExpense = findViewById(R.id.tv_total_expense);
+            tvEmptyMessage = findViewById(R.id.tv_empty_message); // Make sure this exists in your layout
             btnPrevMonth = findViewById(R.id.btn_prev_month);
             btnNextMonth = findViewById(R.id.btn_next_month);
             btnRefresh = findViewById(R.id.btn_refresh);
@@ -139,6 +144,7 @@ public class ChartActivity extends AppCompatActivity {
             Toast.makeText(this, "Error initializing views", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void initializeCurrencySymbols() {
         currencySymbols = new HashMap<>();
         currencySymbols.put("IDR", "Rp");
@@ -259,42 +265,90 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     private void updateChartData(List<DatabaseHelper.CategorySpending> categorySpending) {
+        double totalExpense = 0;
+        for (DatabaseHelper.CategorySpending spending : categorySpending) {
+            totalExpense += spending.getAmount();
+        }
+
+        final double finalTotalExpense = totalExpense;
+        final List<DatabaseHelper.CategorySpending> finalCategorySpending = categorySpending;
+
         try {
-            double totalExpense = 0;
-            for (DatabaseHelper.CategorySpending spending : categorySpending) {
-                totalExpense += spending.getAmount();
+            // If display currency is IDR or currency service is null, use original values
+            if (displayCurrency.equals("IDR") || currencyService == null) {
+                updateUI(finalTotalExpense, finalCategorySpending);
+                return;
             }
 
-            final double finalTotalExpense = totalExpense;
-            final List<DatabaseHelper.CategorySpending> finalCategorySpending = categorySpending;
+            // Check if we already have cached rates to avoid unnecessary API calls
+            if (currencyService.hasRates()) {
+                Log.d(TAG, "Using cached exchange rates");
+                try {
+                    double convertedTotal = currencyService.convertCurrency(finalTotalExpense, "IDR", displayCurrency);
+                    updateUI(convertedTotal, finalCategorySpending);
+                } catch (Exception e) {
+                    Log.e(TAG, "Error converting currency with cached rates", e);
+                    updateUI(finalTotalExpense, finalCategorySpending);
+                }
+                return;
+            }
 
-            if (!displayCurrency.equals("IDR") && currencyService != null) {
-                currencyService.getExchangeRates(new CurrencyService.CurrencyCallback() {
-                    @Override
-                    public void onSuccess(Map<String, Double> rates) {
-                        try {
-                            double convertedTotal = currencyService.convertCurrency(finalTotalExpense, "IDR", displayCurrency);
-                            updateUI(convertedTotal, finalCategorySpending);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error converting currency", e);
-                            updateUI(finalTotalExpense, finalCategorySpending);
-                        }
+            // Need to fetch exchange rates
+            Log.d(TAG, "Fetching exchange rates for currency conversion");
+            currencyService.getExchangeRates(new CurrencyService.CurrencyCallback() {
+                @Override
+                public void onSuccess(Map<String, Double> rates) {
+                    try {
+                        Log.d(TAG, "Successfully received exchange rates");
+                        double convertedTotal = currencyService.convertCurrency(finalTotalExpense, "IDR", displayCurrency);
+                        updateUI(convertedTotal, finalCategorySpending);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error converting currency after receiving rates", e);
+                        updateUI(finalTotalExpense, finalCategorySpending);
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "Currency conversion error: " + error);
+                    updateUI(finalTotalExpense, finalCategorySpending);
+
+                    // Show refresh button for retry
+                    if (btnRefresh != null) {
+                        btnRefresh.setVisibility(android.view.View.VISIBLE);
                     }
 
-                    @Override
-                    public void onError(String error) {
-                        Log.e(TAG, "Currency conversion error: " + error);
-                        updateUI(finalTotalExpense, finalCategorySpending);
+                    // Show a toast to inform user about the error
+                    Toast.makeText(ChartActivity.this, "Error loading exchange rates: " + error, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onNetworkError() {
+                    Log.w(TAG, "Network error occurred, using default rates");
+
+                    // Try to convert with default rates
+                    try {
+                        double convertedTotal = currencyService.convertCurrency(finalTotalExpense, "IDR", displayCurrency);
+                        updateUI(convertedTotal, finalCategorySpending);
+
+                        // Show a toast to inform user about network issue
+                        Toast.makeText(ChartActivity.this, "No internet connection. Using approximate exchange rates.", Toast.LENGTH_LONG).show();
+
+                        // Show refresh button for when network is available
                         if (btnRefresh != null) {
                             btnRefresh.setVisibility(android.view.View.VISIBLE);
                         }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error converting currency with default rates", e);
+                        updateUI(finalTotalExpense, finalCategorySpending);
+
+                        Toast.makeText(ChartActivity.this, "Currency conversion failed. Showing in IDR.", Toast.LENGTH_SHORT).show();
                     }
-                });
-            } else {
-                updateUI(finalTotalExpense, finalCategorySpending);
-            }
+                }
+            });
         } catch (Exception e) {
             Log.e(TAG, "Error updating chart data", e);
+            updateUI(finalTotalExpense, finalCategorySpending);
         }
     }
 
@@ -320,9 +374,17 @@ public class ChartActivity extends AppCompatActivity {
 
             for (DatabaseHelper.CategorySpending spending : categorySpending) {
                 double amount = spending.getAmount();
+
+                // Convert individual category amounts if needed
                 if (!displayCurrency.equals("IDR") && currencyService != null) {
-                    amount = currencyService.convertCurrency(amount, "IDR", displayCurrency);
+                    try {
+                        amount = currencyService.convertCurrency(amount, "IDR", displayCurrency);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error converting category amount", e);
+                        // Use original amount if conversion fails
+                    }
                 }
+
                 float percentage = (float) ((amount / totalExpense) * 100);
                 entries.add(new PieEntry(percentage, spending.getCategory()));
             }
@@ -374,9 +436,14 @@ public class ChartActivity extends AppCompatActivity {
         super.onResume();
         try {
             if (prefs != null) {
-                displayCurrency = prefs.getString(KEY_DISPLAY_CURRENCY, "IDR");
-                updateCurrencyFormat();
-                loadChartData();
+                String newDisplayCurrency = prefs.getString(KEY_DISPLAY_CURRENCY, "IDR");
+
+                // Only reload if currency has changed
+                if (!newDisplayCurrency.equals(displayCurrency)) {
+                    displayCurrency = newDisplayCurrency;
+                    updateCurrencyFormat();
+                    loadChartData();
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, "Error in onResume", e);

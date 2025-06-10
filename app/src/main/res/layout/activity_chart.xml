@@ -49,7 +49,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/textPrimaryColor"
                 android:gravity="center"
-                android:fontFamily="sans-serif-medium" />
+                android:fontFamily="@font/poppins_semibold"/>
 
             <Button
                 android:id="@+id/btn_next_month"
@@ -85,7 +85,7 @@
                 android:text="Total Pengeluaran Bulan Ini"
                 android:textSize="14sp"
                 android:textColor="?attr/textSecondaryColor"
-                android:fontFamily="sans-serif" />
+                android:fontFamily="@font/poppins_light" />
 
             <TextView
                 android:id="@+id/tv_total_expense"
@@ -96,7 +96,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/accentColor"
                 android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-medium" />
+                android:fontFamily="@font/poppins_semibold" />
 
             <Button
                 android:id="@+id/btn_refresh"
@@ -107,7 +107,7 @@
                 android:text="Refresh Data"
                 android:textSize="12sp"
                 android:textColor="?attr/accentColor"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="@font/poppins_semibold"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:minHeight="0dp"
@@ -139,42 +139,18 @@
                 android:layout_margin="16dp" />
 
             <!-- Empty Message -->
-            <LinearLayout
+            <TextView
                 android:id="@+id/tv_empty_message"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:text="Tidak ada data pengeluaran\nData pengeluaran untuk bulan ini kosong"
+                android:textSize="16sp"
+                android:textColor="?attr/textPrimaryColor"
+                android:textAlignment="center"
                 android:gravity="center"
                 android:padding="32dp"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_empty"
-                    android:layout_marginBottom="16dp"
-                    app:tint="?attr/iconTintColor"
-                    android:alpha="0.5" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tidak ada data pengeluaran"
-                    android:textSize="16sp"
-                    android:textColor="?attr/textPrimaryColor"
-                    android:layout_marginBottom="8dp"
-                    android:fontFamily="sans-serif-medium" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Data pengeluaran untuk bulan ini kosong"
-                    android:textSize="14sp"
-                    android:textColor="?attr/textSecondaryColor"
-                    android:textAlignment="center"
-                    android:gravity="center"
-                    android:fontFamily="sans-serif" />
-            </LinearLayout>
+                android:fontFamily="@font/poppins_semibold"
+                android:visibility="gone" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
