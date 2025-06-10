@@ -8,7 +8,7 @@
 - ✅ Tambah transaksi pemasukan dan pengeluaran
 - ✅ Kategorisasi transaksi otomatis
 - ✅ Riwayat transaksi lengkap dengan detail
-- ✅ Edit dan hapus transaksi
+- ✅ Hapus transaksi
 
 ### 💱 *Multi-Currency Support*
 - ✅ Support 15+ mata uang internasional
