@@ -181,7 +181,7 @@
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:fontFamily="@font/poppins_semibold"
-                            android:textColor="?attr/accentColor" />
+                            android:textColor="@color/income_green"/>
 
                     </LinearLayout>
 
@@ -222,7 +222,7 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="20dp"
                 app:cardElevation="8dp"
                 app:cardCornerRadius="20dp"
                 app:cardBackgroundColor="?attr/cardBackgroundColor">

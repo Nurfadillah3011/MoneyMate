@@ -10,10 +10,14 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:gravity="center_vertical"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/headerBackgroundColor"
         android:elevation="6dp"
+        android:background="?attr/headerBackgroundColor"
         android:titleTextColor="@android:color/white"
+        app:tint="?attr/iconTintColor"
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:title="Currency Exchange" />
 
@@ -235,16 +239,6 @@
                                     android:gravity="center"
                                     android:fontFamily="@font/poppins_semibold" />
 
-                                <TextView
-                                    android:id="@+id/tv_result_label"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="USD"
-                                    android:textSize="14sp"
-                                    android:textColor="?attr/textSecondaryColor"
-                                    android:gravity="center"
-                                    android:layout_marginTop="4dp"
-                                    android:fontFamily="@font/poppins_regular"/>
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>

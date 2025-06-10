@@ -1,15 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homeFragment"
-        android:title="Beranda"
+        android:title=""
         android:icon="@drawable/ic_home" />
     <item
         android:id="@+id/action_add_transaction"
-        android:title="Tambah"
+        android:title=""
         android:icon="@drawable/ic_add" />
     <item
         android:id="@+id/monthlyReportFragment"
-        android:title="Laporan"
+        android:title=""
         android:icon="@drawable/ic_report" />
 
 </menu>

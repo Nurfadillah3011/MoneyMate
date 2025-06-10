@@ -242,7 +242,8 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:src="@drawable/ic_income"
-                        android:layout_marginBottom="6dp" />
+                        android:layout_marginBottom="6dp"
+                        app:tint="?attr/iconTintColor"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -250,7 +251,7 @@
                         android:text="Pemasukan"
                         android:textSize="13sp"
                         android:textColor="?attr/textSecondaryColor"
-                        android:fontFamily="sans-serif" />
+                        android:fontFamily="@font/poppins_regular" />
 
                     <TextView
                         android:id="@+id/tv_income"
@@ -283,7 +284,8 @@
                         android:layout_width="28dp"
                         android:layout_height="28dp"
                         android:src="@drawable/ic_expense"
-                        android:layout_marginBottom="6dp" />
+                        android:layout_marginBottom="6dp"
+                        app:tint="?attr/iconTintColor"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -291,7 +293,7 @@
                         android:text="Pengeluaran"
                         android:textSize="13sp"
                         android:textColor="?attr/textSecondaryColor"
-                        android:fontFamily="sans-serif" />
+                        android:fontFamily="@font/poppins_regular" />
 
                     <TextView
                         android:id="@+id/tv_expense"
@@ -312,7 +314,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="7dp"
                 android:elevation="8dp"
                 app:cardCornerRadius="18dp"
