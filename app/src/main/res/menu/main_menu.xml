@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_chart"
-        android:title="Grafik"
-
-        app:showAsAction="never" />
-
+        android:id="@+id/homeFragment"
+        android:title="Beranda"
+        android:icon="@drawable/ic_home" />
     <item
-        android:id="@+id/action_monthly_report"
-        android:title="Laporan Bulanan"
-        app:showAsAction="never" />
+        android:id="@+id/action_add_transaction"
+        android:title="Tambah"
+        android:icon="@drawable/ic_add" />
+    <item
+        android:id="@+id/monthlyReportFragment"
+        android:title="Laporan"
+        android:icon="@drawable/ic_report" />
 
 </menu>
