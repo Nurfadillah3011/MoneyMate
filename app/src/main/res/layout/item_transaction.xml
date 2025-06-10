@@ -5,45 +5,64 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="?attr/cardBackgroundColor">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:padding="16dp"
         android:gravity="center_vertical">
 
-        <ImageView
-            android:id="@+id/iv_icon"
-            android:layout_width="40dp"
+        <!-- Indicator warna sesuai tipe transaksi -->
+        <View
+            android:id="@+id/view_type_indicator"
+            android:layout_width="4dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_expense"
-            android:scaleType="centerInside"
-            android:padding="8dp" />
+            android:background="?attr/accentColor"
+            android:layout_marginRight="16dp"/>
 
+        <!-- Icon dengan background circle -->
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_background_purple">
+
+            <ImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_expense"
+                android:scaleType="centerInside"
+                app:tint="?attr/iconTintColor" />
+        </FrameLayout>
+
+        <!-- Content area -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginLeft="12dp">
+            android:layout_marginLeft="16dp">
 
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Deskripsi Transaksi"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                android:textColor="#333333" />
+                android:textColor="?attr/textPrimaryColor"
+                android:fontFamily="@font/poppins_semibold"  />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="2dp">
+                android:layout_marginTop="4dp">
 
                 <TextView
                     android:id="@+id/tv_category"
@@ -51,27 +70,31 @@
                     android:layout_height="wrap_content"
                     android:text="Kategori"
                     android:textSize="12sp"
-                    android:textColor="#666666" />
+                    android:textColor="?attr/textSecondaryColor"
+                    android:fontFamily="@font/poppins_light" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" • "
                     android:textSize="12sp"
-                    android:textColor="#666666" />
+                    android:textColor="?attr/textSecondaryColor" />
 
-                <TextView
-                    android:id="@+id/tv_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="01 Jan 2024"
-                    android:textSize="12sp"
-                    android:textColor="#666666" />
+
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="01 Jan 2024"
+                android:textSize="12sp"
+                android:textColor="?attr/textSecondaryColor"
+                android:fontFamily="@font/poppins_light" />
         </LinearLayout>
 
+        <!-- Amount dengan styling berbeda untuk income/expense -->
         <TextView
             android:id="@+id/tv_amount"
             android:layout_width="wrap_content"
@@ -79,7 +102,9 @@
             android:text="Rp 50.000"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#F44336" />
+            android:textColor="?attr/accentColor"
+            android:fontFamily="@font/poppins_regular"
+            />
 
     </LinearLayout>
 
