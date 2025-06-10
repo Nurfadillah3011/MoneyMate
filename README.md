@@ -1,178 +1,189 @@
-FinFlex - Android Personal Finance Application
-FinFlex adalah aplikasi keuangan pribadi berbasis Android yang dirancang untuk membantu pengguna mengelola transaksi, melacak pengeluaran, dan melakukan konversi mata uang dengan antarmuka yang intuitif dan fitur-fitur praktis. Aplikasi ini dikembangkan untuk mempermudah pengelolaan keuangan sehari-hari.
+💰 FinFlex - Personal Finance Manager
 
-1. Fitur Utama
+*FinFlex* adalah aplikasi Android modern untuk pengelolaan keuangan pribadi yang membantu Anda melacak pemasukan dan pengeluaran dengan mudah dan efisien.
 
-- Dual Activity & Fragment Architecture: Menggunakan MainActivity sebagai launcher dan berbagai fragment (HomeFragment, AddTransactionFragment, MonthlyReportFragment) untuk navigasi.
-- Intent Communication: Navigasi antar activity seperti TransactionDetailActivity dan ChartActivity menggunakan Intent.
-- RecyclerView: Menampilkan daftar transaksi di MonthlyReportFragment dengan scrolling yang mulus.
-- Fragment Navigation: Menggunakan Navigation Component dengan BottomNavigationView untuk navigasi antar fragment.
-- Background Threading: Operasi database dijalankan secara asinkronus menggunakan Executor di DatabaseHelper.
-- API Integration: Menggunakan Frankfurter API dengan Retrofit untuk data kurs mata uang.
-- Local Data Persistence: SQLite database (MoneyMate.db) untuk menyimpan transaksi.
-- Dark/Light Theme: Toggle tema (light, dark, system) dengan SharedPreferences di MainActivity.
-- Refresh on Error: Tombol refresh di ChartActivity dan CurrencyActivity untuk menangani kegagalan koneksi.
+## ✨ Fitur Utama
 
-2. Fitur Tambahan
+### 📊 *Manajemen Transaksi*
+- ✅ Tambah transaksi pemasukan dan pengeluaran
+- ✅ Kategorisasi transaksi otomatis
+- ✅ Riwayat transaksi lengkap dengan detail
+- ✅ Edit dan hapus transaksi
 
-- Real-time Currency Conversion: Konversi mata uang instan di CurrencyActivity dengan input dinamis.
-- Offline Support: Menggunakan data kurs yang di-cache jika tidak ada koneksi internet.
-- Transaction Management: Tambah, lihat detail, dan hapus transaksi dengan konfirmasi.
-- Visual Reporting: Pie chart di ChartActivity untuk visualisasi pengeluaran per kategori.
-- Balance Checking: Validasi saldo sebelum menambahkan pengeluaran di AddTransactionFragment.
-- Error Handling: Pesan error yang informatif untuk kegagalan database, jaringan, dan konversi.
-- Monthly Reports: Ringkasan pemasukan, pengeluaran, dan saldo per bulan di MonthlyReportFragment.
+### 💱 *Multi-Currency Support*
+- ✅ Support 15+ mata uang internasional
+- ✅ Konverter mata uang real-time
+- ✅ Tampilan saldo dalam berbagai mata uang
+- ✅ Update kurs otomatis via API
 
-3. Arsitektur Aplikasi
-   
-- Technical Stack
-Language: Java
-Min SDK: Android API 24 (Android 7.0)
-Target SDK: Android API 34
-Architecture: MVC (Model-View-Controller) dengan pendekatan modular
-Database: SQLite via SQLiteOpenHelper
-Network: Retrofit2 + OkHttp3
-UI: Material Design components
-Navigation: Android Navigation Component
-Charting: MPAndroidChart untuk visualisasi data
+### 📈 *Analisis & Laporan*
+- ✅ Grafik pie pengeluaran per kategori
+- ✅ Laporan bulanan detail
+- ✅ Analisis tren keuangan
+- ✅ Export data laporan
 
-4. Setup & Installation
+### 🎨 *User Experience*
+- ✅ Material Design 3
+- ✅ Dark mode & Light mode
+- ✅ Responsive design
+- ✅ Animasi smooth
+- ✅ Navigation yang intuitif
 
-- Prerequisites
-Android Studio Arctic Fox atau versi lebih baru
-Android SDK API 24+
-Java Development Kit 8+
-Koneksi internet untuk build dan API call
+### 🔧 *Fitur Teknis*
+- ✅ Offline-first architecture
+- ✅ SQLite local database
+- ✅ REST API integration
+- ✅ Error handling yang robust
 
-- Installation Steps
-1. Clone Repository
+## 🛠 Tech Stack
+
+### *Frontend*
+- *Language:* Java
+- *UI Framework:* Android Native
+- *Design System:* Material Design 3
+- *Navigation:* Navigation Component
+- *Charts:* MPAndroidChart
+
+### *Backend & Data*
+- *Local Database:* SQLite with custom DatabaseHelper
+- *API Client:* Retrofit 2
+- *JSON Parsing:* Gson
+- *HTTP Logging:* OkHttp Interceptor
+
+### *Architecture*
+- *Pattern:* Fragment-based Navigation
+- *Currency API:* Frankfurter API (free exchange rates)
+- *Database:* Room-like SQLite implementation
+- *Threading:* AsyncTask & Callbacks
+
+### *Dependencies*
+gradle
+dependencies {
+    // UI Components
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment:2.5.3"
+    implementation "androidx.navigation:navigation-ui:2.5.3"
+    
+    // Charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    
+    // Networking
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+}
+
+
+## 🚀 Installation & Setup
+
+### *Prerequisites*
+- Android Studio Arctic Fox atau lebih baru
+- JDK 11+
+- Android SDK API level 24+
+- Device/Emulator dengan Android 7.0+
+
+### *Clone Repository*
+bash
 git clone https://github.com/yourusername/moneymate.git
 cd moneymate
 
-2. Open in Android Studio
-Buka Android Studio
-Pilih "Open an existing project"
-Arahkan ke folder moneymate
 
-3. Sync Project
-Tunggu Gradle sync selesai
-Install missing SDK components jika diminta
+### *Setup Project*
+1. Buka Android Studio
+2. File → Open → Pilih folder project
+3. Sync project dengan Gradle files
+4. Run aplikasi di emulator/device
 
-4. API Key Configuration (SECURE SETUP)
-IMPORTANT: Jangan commit API key ke repository!
+### *API Configuration*
+Aplikasi menggunakan [Frankfurter API](https://frankfurter.app/) untuk kurs mata uang:
+- ✅ Free API (tidak perlu API key)
+- ✅ Real-time exchange rates
+- ✅ Support 30+ currencies
 
-Buat file local.properties di root project:
-# local.properties
-FRANKFURTER_API_KEY=(API KEY HERE)
+## 📖 Usage Guide
 
-Pastikan local.properties ada di .gitignore:
-# .gitignore
-local.properties
+### *1. Menambah Transaksi*
 
-Untuk Tim: Bagikan API key secara terpisah (email, chat, dll)
-
-Verifikasi: Build gagal jika API key tidak dikonfigurasi
-
-5. Build & Run
-./gradlew assembleDebug
-# atau run langsung dari Android Studio
-
-📖 Cara Penggunaan
-1. Navigation
-- Home Tab: Tampilan ringkasan saldo dan transaksi terbaru (HomeFragment)
-- Add Transaction: Form untuk menambah transaksi baru (AddTransactionFragment)
-- Monthly Report: Laporan bulanan dan daftar transaksi (MonthlyReportFragment)
-- Chart: Visualisasi pengeluaran per kategori (ChartActivity)
-- Currency: Konversi mata uang real-time (CurrencyActivity)
-
-2. Fitur Interaksi
-- Tambah Transaksi: Isi jumlah, deskripsi, tipe, kategori, dan tanggal, lalu simpan
-- Lihat Detail: Tap transaksi di daftar untuk melihat detail
-- Hapus Transaksi: Long-press transaksi atau gunakan tombol hapus di detail
-- Navigasi Bulan: Tombol prev/next untuk lihat data bulan lain
-- Konversi Mata Uang: Pilih mata uang asal/tujuan, masukkan jumlah
-- Swap Currency: Tombol swap untuk tukar mata uang
-- Theme Toggle: Pilih tema (light/dark/system) di MainActivity
-
-3. Offline Mode
-- Transaksi disimpan di database lokal
-- Data kurs di-cache untuk konversi offline
-- Laporan dan chart tetap dapat diakses tanpa internet
-
-🔌 API Integration
-- Frankfurter API Implementation
-  
-- Base URL: https://api.frankfurter.app/
-
-- Endpoints Used:
-/latest - Dapatkan kurs mata uang terbaru
-
-- Request Example:
-GET /latest?from=EUR
-
-Error Handling:
-- Network timeout dengan retry
-- Fallback ke data cache saat gagal
-- Pesan error ramah pengguna
-  
-
- Database Schema
-Transactions Table
-CREATE TABLE transactions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    amount REAL NOT NULL,
-    description TEXT,
-    type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
-    category TEXT NOT NULL,
-    date TEXT NOT NULL
-);
-
-Database Operations
-- Insert: Simpan transaksi baru
-- Query: Ambil transaksi per bulan, hitung saldo, laporan kategori
-- Update: Edit transaksi (opsional, tergantung implementasi)
-- Delete: Hapus transaksi dengan konfirmasi
-
-Testing
-Manual Testing Checklist
-- Aplikasi launch dengan sukses
-- Penambahan transaksi berfungsi
-- Laporan bulanan akurat
-- Pie chart menampilkan data benar
-- Konversi mata uang real-time
-- Hapus transaksi berfungsi
-- Offline mode berjalan
-- Toggle tema berfungsi
-- Error handling untuk jaringan dan database
-- Navigasi antar fragment/activity
-
-Performance Testing
-- Scrolling halus di RecyclerView
-- Operasi database asinkronus
-- Optimisasi penggunaan memori
-- Responsivitas UI
-
-Build & Release
-Debug Build
-./gradlew assembleDebug
-
-Release Build
-./gradlew assembleRelease
-
-APK Location
-Debug: app/build/outputs/apk/debug/app-debug.apk
-Release: app/build/outputs/apk/release/app-release.apk
-
-🔐 Security & Privacy
-🛡️ API Key Security (BEST PRACTICES)
-
-✅ API key disimpan di local.properties (tidak di-commit)
-✅ Validasi otomatis untuk API key
-✅ Komunikasi API via HTTPS
+1. Tap tombol "Tambah" di bottom navigation
+2. Pilih tipe transaksi (Income/Expense)
+3. Masukkan jumlah dan deskripsi
+4. Pilih kategori dan tanggal
+5. Tap "Simpan"
 
 
-Nama: Nur Fadillaah
-NIM: H071231080
-Praktikum: Lab Pemrograman Mobile 2025
-Tema: Pengelolaan Keuangan Pribadi (Keuangan)
+### *2. Melihat Laporan*
 
+1. Tap "Laporan" di bottom navigation
+2. Gunakan arrow untuk navigasi bulan
+3. Lihat summary dan daftar transaksi
+4. Tap transaksi untuk detail lengkap
+
+
+### *3. Konversi Mata Uang*
+
+1. Tap icon "Konverter" di home screen
+2. Pilih mata uang asal dan tujuan
+3. Masukkan nominal
+4. Lihat hasil konversi real-time
+
+
+### *4. Mengubah Tema*
+
+1. Tap icon tema di header
+2. Pilih Light/Dark/System Default
+3. Tema akan berubah secara otomatis
+
+
+## 🏗 Project Structure
+
+
+app/src/main/java/com/example/moneymate/
+├── 📁 activities/
+│   ├── MainActivity.java
+│   ├── ChartActivity.java
+│   ├── CurrencyActivity.java
+│   └── TransactionDetailActivity.java
+├── 📁 fragments/
+│   ├── HomeFragment.java
+│   ├── AddTransactionFragment.java
+│   └── MonthlyReportFragment.java
+├── 📁 models/
+│   ├── Transaction.java
+│   └── ExchangeRateResponse.java
+├── 📁 database/
+│   └── DatabaseHelper.java
+├── 📁 services/
+│   ├── CurrencyService.java
+│   ├── ApiService.java
+│   └── RetrofitClient.java
+├── 📁 adapters/
+│   └── TransactionAdapter.java
+└── 📁 utils/
+    └── NetworkUtils.java
+
+
+
+## 👨‍💻 Developer
+
+*Nur Fadillah*
+- GitHub: [@Nurfadillah3011](https://github.com/Nurfadillah3011)
+- Email: fadillan945@gmail.com
+
+## 🙏 Acknowledgments
+
+- [Material Design](https://material.io/) - Design system
+- [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) - Chart library
+- [Frankfurter API](https://frankfurter.app/) - Currency exchange rates
+- [Retrofit](https://square.github.io/retrofit/) - HTTP client
+- Android development community
+
+---
+
+<div align="center">
+  <p>⭐ Star this repository if you find it helpful!</p>
+  <p>Made with ❤ for personal finance management</p>
+</div>
